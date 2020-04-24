@@ -520,23 +520,15 @@ def explanationBadges(findex):
       </ul>
     <hr />
     """)
-    
-with open(sys.argv[1]) as json_file:
-   fulldata = json.load(json_file)
 
-   print("Generating database page")
 
-   line_count = 0
-   #topicsGlobal = getAllTopics(fulldata)
-   findex = codecs.open('tmp/core-browse.html','w+', "UTF-8")
-   pathPages='tmp/papers/'
-
-   findex.write('''
+def write_browse_step1(fbrowse):
+   fbrowse.write('''
       <footer>
        <a href="index.html#first" class="button">The Project</a>
        <a href="#first" class="button scrolly">The Data</a>
        <a href="index.html#third" class="button">Contribute</a>
-	    </footer>
+    </footer>
     </section>
     <!-- First -->
     <section id="first" class="main">
@@ -545,9 +537,9 @@ with open(sys.argv[1]) as json_file:
             <h2>The Data</h2>
    ''')
 
-   explanationBadges(findex)
+   explanationBadges(fbrowse)
 
-   findex.write('''
+   fbrowse.write('''
             <div class="row">
                 <div class="column2 chart-container">
                     <canvas height="150" id="myChartTopics" class="chartjs-render-monitor"></canvas>
@@ -557,109 +549,18 @@ with open(sys.argv[1]) as json_file:
                 </div>
             </div>
    ''')
+   dumpTableHeader(fbrowse)
 
-   dumpTableHeader(findex)
-
-
-   allTopics = {"Rendering", "Animation and Simulation", "Geometry", "Images","Virtual Reality", "Fabrication"}
+def write_browse_step2(fbrowse, cpt, cptHasCode, cptVariants):
+   dumpTableFooter(fbrowse,allTopics)
    
-   cpt=0;
-   cptHasCode=0;
-   cptVariants=0
-   print("Generating index...")
-   for paper in fulldata:
-    for variant in paper:
-      if isinstance(variant, str):
-        print("Oops.. the variant is a string...")
-      else:
-        if isinstance(variant, list):
-           print("Oops.. the variant is a list...")
-        else:
-           cptVariants += 1
-           if variant['Is master variant (boolean)'] == True:
-
-              doi = variant['DOI']
-              doiclean = re.sub('/', '-', doi)
-
-              authors=getAuthors(pathPages,doi,doiclean)
-              authorstring=''
-              for x in authors:
-               authorstring +=', '+ x['given']+' '+ x['family']
-               # remove first comma
-              authorstring = authorstring[2:];
-             
-              findex.write('<tr class="'+variant['Topic {Rendering, Animation and Simulation, Geometry, Images, Virtual Reality, Fabrication}']+' '+str(variant['Year'])+' ">')
-              
-              hasCode = ""
-              if variant['Code available (boolean)'] == True:
-                hasCode = '✔️'
-                cptHasCode += 1
-              else:
-                hasCode = '×'
-          
-              hasPseudoCode = variant["If code not available, pseudo-code available (boolean)"]
-              if hasPseudoCode==True:
-                  hasPseudoCode = '✔️'
-              else:
-                  hasPseudoCode = '×'
-
-              paperBadge = genBadges(variant)
-
-              altmetric = getAltmetric(pathPages,doiclean)
-              
-              if thumbExists(pathPages,doiclean):
-                 findex.write('<td style="text-align:center;vertical-align: middle;"><img class="thumb" src="papers/'+doiclean+'/'+doiclean+'-thumb-small.png"></td>')
-              else:
-                 findex.write('<td></td>')
-              findex.write("<td> <a href=papers/"+doiclean+"/index.html>"+variant['Title']+"</a> "+authorstring+"</td>")
-              findex.write("<td>"+paperBadge[0]+" </td>")
-              #PDF
-              findex.write("<td></td>")
-              #Year
-              findex.write("<td>"+str(variant['Year'])+"</td>")
-              #Topic
-              findex.write("<td>"+variant['Topic {Rendering, Animation and Simulation, Geometry, Images, Virtual Reality, Fabrication}']+"</td>")
-              #Code avai
-              findex.write("<td>"+hasCode+"</td>")
-              #Repl score
-              findex.write("<td>"+str(variant['Replicate paper results score {0=NA, 1,2,3,4,5}'])+"</td>")
-              #Pseudocode only
-              findex.write("<td>"+ hasPseudoCode+"</td>")
-              #Pseudo score
-              findex.write("<td>"+str(variant['If pseudo-code, could the paper be trivially implemented? {0..4}'])+"</td>")
-              #Doc score
-              findex.write("<td>"+str(variant['Documentation score {0=NA,1,2,3}'])+"</td>")
-              #GG
-              findex.write("<td></td>")
-              #altmetric
-              if altmetric[0] != -1:
-                  findex.write('   <td> <a href="'+altmetric[2]+'">'+str(altmetric[0])+'</a></td>')
-              else:
-                  findex.write("<td></td>")
-                  
-              findex.write("</tr>")
-              cpt+=1
-
-   print("Generating pages...")
-   for paper in fulldata:
-      generateAllPages(pathPages,paper)
-
-
-   dumpTableFooter(findex,allTopics)
-   
-   findex.write('''
+   fbrowse.write('''
             </div>
         </header>
     </section>
     ''')
 
-   findex.close()
-   print("Number of reviews (including variants) = "+str(cpt))
-
-
-   print("Generating index page")
-   findex = codecs.open('tmp/core-index.html','w+', "UTF-8")
-
+def write_index_step1(findex):
    findex.write('''
       <footer>
 	<a href="#first" class="button scrolly">The Project</a>
@@ -667,6 +568,9 @@ with open(sys.argv[1]) as json_file:
 	<a href="#third" class="button scrolly">Contribute</a>
       </footer>
     </section>
+    ''')
+def write_index_step2(findex, cpt, cptHasCode, cptVariants):
+   findex.write('''
     <!-- First -->
     <section id="first" class="main">
       <header>
@@ -856,6 +760,110 @@ with open(sys.argv[1]) as json_file:
             </div>
         </div>
     </section>
-	  </div>
+    </div>
     ''')
+
+with open(sys.argv[1]) as json_file:
+   fulldata = json.load(json_file)
+
+   print("Generating webpages")
+
+   line_count = 0
+   #topicsGlobal = getAllTopics(fulldata)
+   fbrowse = codecs.open('tmp/core-browse.html','w+', "UTF-8")
+   findex = codecs.open('tmp/core-index.html','w+', "UTF-8")
+   pathPages='tmp/papers/'
+
+   write_browse_step1(fbrowse)
+   write_index_step1(findex)
+
+   allTopics = {"Rendering", "Animation and Simulation", "Geometry", "Images","Virtual Reality", "Fabrication"}
+
+   cpt=0;
+   cptHasCode=0;
+   cptVariants=0
+   print("Generating index...")
+   for paper in fulldata:
+    for variant in paper:
+      if isinstance(variant, str):
+        print("Oops.. the variant is a string...")
+      else:
+        if isinstance(variant, list):
+           print("Oops.. the variant is a list...")
+        else:
+           cptVariants += 1
+           if variant['Is master variant (boolean)'] == True:
+
+              doi = variant['DOI']
+              doiclean = re.sub('/', '-', doi)
+
+              authors=getAuthors(pathPages,doi,doiclean)
+              authorstring=''
+              for x in authors:
+               authorstring +=', '+ x['given']+' '+ x['family']
+               # remove first comma
+              authorstring = authorstring[2:];
+
+              fbrowse.write('<tr class="'+variant['Topic {Rendering, Animation and Simulation, Geometry, Images, Virtual Reality, Fabrication}']+' '+str(variant['Year'])+' ">')
+
+              hasCode = ""
+              if variant['Code available (boolean)'] == True:
+                hasCode = '✔️'
+                cptHasCode += 1
+              else:
+                hasCode = '×'
+
+              hasPseudoCode = variant["If code not available, pseudo-code available (boolean)"]
+              if hasPseudoCode==True:
+                  hasPseudoCode = '✔️'
+              else:
+                  hasPseudoCode = '×'
+
+              paperBadge = genBadges(variant)
+
+              altmetric = getAltmetric(pathPages,doiclean)
+
+              if thumbExists(pathPages,doiclean):
+                 fbrowse.write('<td style="text-align:center;vertical-align: middle;"><img class="thumb" src="papers/'+doiclean+'/'+doiclean+'-thumb-small.png"></td>')
+              else:
+                 fbrowse.write('<td></td>')
+              fbrowse.write("<td> <a href=papers/"+doiclean+"/index.html>"+variant['Title']+"</a> "+authorstring+"</td>")
+              fbrowse.write("<td>"+paperBadge[0]+" </td>")
+              #PDF
+              fbrowse.write("<td></td>")
+              #Year
+              fbrowse.write("<td>"+str(variant['Year'])+"</td>")
+              #Topic
+              fbrowse.write("<td>"+variant['Topic {Rendering, Animation and Simulation, Geometry, Images, Virtual Reality, Fabrication}']+"</td>")
+              #Code avai
+              fbrowse.write("<td>"+hasCode+"</td>")
+              #Repl score
+              fbrowse.write("<td>"+str(variant['Replicate paper results score {0=NA, 1,2,3,4,5}'])+"</td>")
+              #Pseudocode only
+              fbrowse.write("<td>"+ hasPseudoCode+"</td>")
+              #Pseudo score
+              fbrowse.write("<td>"+str(variant['If pseudo-code, could the paper be trivially implemented? {0..4}'])+"</td>")
+              #Doc score
+              fbrowse.write("<td>"+str(variant['Documentation score {0=NA,1,2,3}'])+"</td>")
+              #GG
+              fbrowse.write("<td></td>")
+              #altmetric
+              if altmetric[0] != -1:
+                  fbrowse.write('   <td> <a href="'+altmetric[2]+'">'+str(altmetric[0])+'</a></td>')
+              else:
+                  fbrowse.write("<td></td>")
+
+              fbrowse.write("</tr>")
+              cpt+=1
+
+   write_browse_step2(fbrowse, cpt, cptHasCode, cptVariants)
+   write_index_step2(findex, cpt, cptHasCode, cptVariants)
+
+   print("Generating pages...")
+   for paper in fulldata:
+      generateAllPages(pathPages,paper)
+
+   fbrowse.close()
    findex.close()
+   print("Number of reviews (including variants) = "+str(cpt))
+
