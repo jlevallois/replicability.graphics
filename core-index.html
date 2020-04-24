@@ -1,0 +1,189 @@
+
+      <footer>
+	<a href="#first" class="button scrolly">The Project</a>
+	<a href="browse.html#first" class="button">The Data</a>
+	<a href="#third" class="button scrolly">Contribute</a>
+      </footer>
+    </section>
+    <!-- First -->
+    <section id="first" class="main">
+      <header>
+	<div class="container">
+	  <h2>The Project</h2>
+	  <p style="text-align:left"> Being able to duplicate published research results is an
+        important process of conducting research whether to build upon
+        these findings or to compare with them.  This process is
+        called ``replicability'' when using the original authors'
+        artifacts (e.g., code), or ``reproducibility'' otherwise
+        (e.g., re-implementing algorithms).  Reproducibility and
+        replicability of research results have gained a lot of
+        interest recently with assessment studies being led in various
+        fields, and they are often seen as a trigger for better result
+        diffusion and transparency.  In this project, we assess
+        replicability in Computer Graphics, by evaluating whether the
+        code is available and whether it works properly.  As a proxy
+        for this field we compiled, ran and analyzed 151 codes out of
+       374 papers from 2014, 2016 and 2018 SIGGRAPH conferences. This
+        analysis shows a clear increase in the number of papers with
+        available and operational research codes with a dependency on
+        the subfields, and indicates a correlation between code
+        replicability and citation count.</p>
+         
+      <p style="text-align:left">This website provides an interactive tool to explore our results and evaluation data.
+      It also provides tools to comment on the various codes either as an author or as a user.</p>
+
+
+      <p style="text-align:left">All materials (data, scripts..) that  have been used to generate these results are available on the  <a
+      href="https://github.com/GraphicsReplicability/replicability.graphics"> <img width="20pt" src="images/github.png"/> replicability.graphics
+      GitHub project</a>.</p>
+
+
+     <p style="text-align:left"> Our project aims at providing the community with tools to improve Computer Graphics research replicability. Sharing this goal is the <a href="http://ReplicabilityStamp.org">Graphics
+     Replicability Stamp Initiative</a> whose objective is to highlight replicable research works in Computer Graphics.</p>
+  
+      <p style="text-align:left">You can contribute new code analysis for computer graphics
+      papers. We're looking forward to your <a href="#third" class="scrolly">contributions</a>. You can also <a href="#fourth" class="scrolly">contact us</a>.</p>
+
+
+	</div>
+      </header>
+      <div class="content dark style1 featured">
+	<div class="container">
+	  <div class="row">
+	    <div class="col-4 col-12-narrow">
+	      <section>
+		<span class="feature-icon"><span class="icon 
+		solid fa-book-open"></span></span>
+		<header>
+		  <h3><a href="browse.html#first">Explore</a></h3>
+		</header>
+		<p>Explore the data and our replicability scores</p>
+	      </section>
+	    </div>
+	    <div class="col-4 col-12-narrow">
+	      <section>
+		<span class="feature-icon"><span class="icon solid fa-microscope"></span></span>
+		<header>
+		  <h3><a href="#second" class="scrolly">Analyze</a></h3>
+		</header>
+		<p>Read our Siggraph 2020 paper on 374 analyzed Siggraph papers.</p>
+	      </section>
+	    </div>
+	    <div class="col-4 col-12-narrow">
+	      <section>
+		<span class="feature-icon"><span class="icon solid fa-comments"></span></span>
+		<header>
+		  <h3><a href="#third" class="scrolly" >Contribute</a></h3>
+		</header>
+		<p>Add comments or new analysis for Computer Graphics papers.</p>
+	      </section>
+	    </div>
+	    <div class="col-12">
+	      <footer>
+		<a href="#second" class="button scrolly">374 reviews so far</a>
+	      </footer>
+	    </div>
+	  </div>
+	</div>
+      </div>
+    </section>
+
+
+    <section id="second" class="main">
+        <div class="content dark style2">
+            <div class="container">
+                <div class="col-4 col-12-narrow">
+                        <h3>Publication</h3>
+                        <p><a href="">Nicolas Bonneel, David Coeurjolly, Julie Digne, Nicolas Mellado, <i>Code Replicability in Computer Graphics</i>, Siggraph 2020 </a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   	<section id="third" class="main">
+	  <header>
+	    <div class="container">
+	      <h2>Contribute</h2>
+              <p style="text-align:left">There are several ways in which you can contribute and help us improve Computer Graphics research replicability</p>
+              <ul style="text-align:left">
+              <li> Add a comment (alternative compilation tricks, details on the code...) via the discussion on each paper page.</li>
+              <li> Add a new variant (replicability test), <i>i.e.</i> edit an existing JSON file (see below). 
+              <li> Add a new entry to the system (new paper), <i>i.e.</i> submit a new JSON file.
+              </ul>
+
+                <p style="text-align:left">For the last two cases, you
+                can either submit a proper JSON file as a <a
+                href="https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request">pull-request</a>
+                to this project, or set the JSON file to <a href=mailto:GraphicsReplicability@liris.cnrs.fr">GraphicsReplicability@liris.cnrs.fr</a>.</p>
+
+
+
+                <p style="text-align:left">In our system, the website
+                is fully generated from data available on JSON
+                documents. You can browse the database on the <a
+                href="https://github.com/GraphicsReplicability/replicability.graphics/tree/master/data">github
+                project page</a>. Each paper is a single JSON file, named by the paper DOI, 
+                with multiple "variant" records. Each variant is a
+                build test on a specific system, environment or
+                reviewer. For example, an article wit DOI <b>10.1145/2601097.2601102</b> has a <b>10.1145-2601097.2601102.json</b> file which looks like </p>
+                <pre class="prejson">
+
+                [
+                  {
+                    ....
+                    ... data for variant A ...
+                    ...
+                  },
+                  {
+                    ....
+                    ... data for variant B ...
+                    ...
+                  },
+                  ....
+                ]
+                </pre>
+                
+                <p style="text-align:left">We highly recommend having a look to our <a
+                href="https://github.com/dcoeurjo/ReplData-private/blob/master/template.json">template
+                JSON</a> with all the explanations about the fields we
+                are using.</p>
+
+                <p style="text-align:left">If you have any question,
+                feature requests or found any bug, do not hesitate to
+                report an <a
+                href="https://github.com/GraphicsReplicability/replicability.graphics/issues/new/choose">Issue</a>.
+                </p>
+
+                </div>
+           </header>
+        </section>
+
+    <section id="fourth" class="main">
+        <div class="content dark style2">
+            <div class="container">
+                <div class="col-4 col-12-narrow">
+	      <h2>Contact us</h2>
+	      <p>Drop us an email for more information or to let us know what you think.</p>
+                </div>
+	  <div class="content style4 featured">
+	    <div class="container medium">
+	      <form method="post" action="mailto:GraphicsReplicability@liris.cnrs.fr">
+		<div class="row gtr-50">
+		  <div class="col-6 col-12-mobile"><input type="text" placeholder="Name" /></div>
+		  <div class="col-6 col-12-mobile"><input type="text" placeholder="Email" /></div>
+		  <div class="col-12"><textarea name="message" placeholder="Message"></textarea></div>
+		  <div class="col-12">
+		    <ul class="actions special">
+		      <li><input type="submit" class="button" value="Send Message" /></li>
+		      <li><input type="reset" class="button alt" value="Clear Form" /></li>
+		    </ul>
+		  </div>
+		</div>
+	      </form>
+	    </div>
+	  </div>
+            </div>
+        </div>
+    </section>
+	  </div>
+    
